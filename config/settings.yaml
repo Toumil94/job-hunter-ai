@@ -1,0 +1,72 @@
+# =============================================================================
+# ⚙️ PARAMÈTRES SYSTÈME - Configure tes API keys et préférences
+# =============================================================================
+# IMPORTANT: Ne commite JAMAIS ce fichier avec tes vraies clés !
+# Utilise le fichier .env à la place (voir .env.example)
+
+# --- APIs ---
+apis:
+  # Claude API (pour le matching IA et génération de lettres)
+  # Obtenir une clé: https://console.anthropic.com/
+  anthropic:
+    model: "claude-sonnet-4-20250514"
+    max_tokens: 1500
+  
+  # Adzuna API (offres d'emploi - GRATUIT)
+  # Obtenir une clé: https://developer.adzuna.com/
+  adzuna:
+    base_url: "https://api.adzuna.com/v1/api/jobs"
+    # Pays à chercher
+    countries:
+      - "ch"  # Suisse
+      - "fr"  # France (frontalier)
+    results_per_page: 50
+
+# --- Email (pour les rapports quotidiens) ---
+email:
+  # Utilise un "App Password" Gmail, pas ton vrai mot de passe
+  # Guide: https://support.google.com/accounts/answer/185833
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  sender_email: "${EMAIL_SENDER}"
+  sender_password: "${EMAIL_APP_PASSWORD}"
+  recipient_email: "${EMAIL_RECIPIENT}"
+
+# --- Planning ---
+schedule:
+  # Heures de scan (format 24h, UTC)
+  scan_times:
+    - "07:00"  # Scan du matin
+    - "18:00"  # Scan du soir
+  
+  # Jours de relance après candidature
+  followup_days:
+    first_followup: 7    # 1ère relance après 7 jours
+    second_followup: 14  # 2ème relance après 14 jours
+    final_followup: 21   # Dernière relance après 21 jours
+
+# --- Tracker ---
+tracker:
+  # Fichier de suivi des candidatures
+  database_file: "data/applications.json"
+  
+  # Statuts possibles
+  statuses:
+    - "found"           # Offre trouvée
+    - "matched"         # Matchée par l'IA
+    - "applied"         # Candidature envoyée
+    - "followup_1"      # 1ère relance envoyée
+    - "followup_2"      # 2ème relance envoyée
+    - "response"        # Réponse reçue
+    - "interview"       # Entretien planifié
+    - "rejected"        # Refusé
+    - "offer"           # Offre reçue
+
+# --- Limites de sécurité ---
+safety:
+  # Nombre max de candidatures auto par jour
+  max_daily_applications: 10
+  # Délai entre chaque candidature (secondes)
+  delay_between_applications: 30
+  # Mode simulation (true = ne postule pas vraiment, juste un rapport)
+  dry_run: true  # ⚠️ METS À false QUAND T'ES PRÊT

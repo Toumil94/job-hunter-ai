@@ -1,0 +1,273 @@
+# =============================================================================
+# 🎯 PROFIL DE LYES TOUMI — Généré depuis ses CV FR & EN
+# =============================================================================
+
+personal:
+  name: "Lyes"
+  full_name: "Lyes Toumi"
+  email: "[retiré]"
+  phone: "[retiré]"
+  location: "Ambilly (74), France – Frontalier Genève"
+  target_location: "Genève / Lausanne / Suisse Romande"
+  search_radius_km: 50
+  availability: "Immédiate"
+  work_permit: "Citoyen UE – éligible permis G"
+  linkedin: "https://linkedin.com/in/lyes-toumi"
+  portfolio: "https://toumilyes.netlify.app"
+  languages:
+    - language: "Français"
+      level: "Natif"
+    - language: "Anglais"
+      level: "C1 (TOEIC certifié)"
+    - language: "Espagnol"
+      level: "B1 Intermédiaire"
+
+professional:
+  title: "Data & AI Engineer | BI Analyst"
+  tagline: "De la donnée brute à l'IA en production — je conçois, je construis, je livre."
+  experience_years: 3
+  current_company: "EssilorLuxottica"
+  company_context: "Groupe international – 190 000 collaborateurs"
+  work_period: "Oct. 2022 – Oct. 2025"
+  work_locations: "Créteil (Paris) & Bangkok"
+
+  education:
+    - degree: "Diplôme d'Ingénieur en Informatique, spécialité Data & IA"
+      school: "CESI École d'Ingénieurs – Lyon"
+      level: "Bac+5 – Titre habilité CTI (équivalent Master)"
+      years: "2021 – 2025"
+    - degree: "Licence 1 Mathématiques"
+      school: "Université Côte d'Azur Valrose – Nice"
+      years: "2019 – 2020"
+
+  certifications:
+    - "Azure Data Fundamentals (DP-900)"
+    - "Databricks Lakehouse Fundamentals"
+    - "Generative AI Fundamentals – Databricks"
+    - "AI Agent Fundamentals – Databricks"
+    - "Databricks Data Engineer Associate (en cours)"
+    - "TOEIC – Niveau C1"
+    - "Cisco CCNA"
+
+  skills:
+    ai_llm:
+      - "RAG"
+      - "LangChain"
+      - "OpenAI API"
+      - "Anthropic API"
+      - "Prompt Engineering"
+      - "Embeddings"
+      - "Vector DB"
+      - "Agents IA"
+    data_engineering:
+      - "Python"
+      - "SQL"
+      - "PySpark"
+      - "ETL/ELT"
+      - "Modélisation dimensionnelle"
+      - "Data Quality"
+      - "CI/CD"
+      - "Git"
+    cloud_platforms:
+      - "Databricks"
+      - "Microsoft Azure"
+      - "Azure Data Factory"
+      - "Delta Lake"
+      - "Docker"
+    bi_analytics:
+      - "Power BI (DAX)"
+      - "SAP BusinessObjects"
+      - "Qlik"
+      - "Excel avancé"
+      - "KPI Design"
+      - "Dashboards"
+    business_analysis:
+      - "Requirements Gathering"
+      - "Functional Specs"
+      - "Stakeholder Management"
+      - "Change Management"
+      - "Process Mapping"
+    agentic_tools:
+      - "Claude Code"
+      - "Cursor"
+      - "Copilot Studio"
+      - "ChatGPT"
+      - "AI Workflow Automation"
+
+  # Réalisations clés avec chiffres (utilisées pour les lettres de motivation)
+  key_achievements:
+    - title: "Chatbot RAG en production"
+      description: "Conçu et déployé un chatbot interne basé sur une architecture RAG (LangChain, embeddings, vector DB), réduisant de 30% le temps de recherche d'information"
+      impact: "-30% temps de recherche"
+      skills_used: ["RAG", "LangChain", "Embeddings", "Vector DB", "Python"]
+    - title: "Benchmarking et optimisation LLM"
+      description: "Intégré et benchmarké plusieurs modèles LLM, avec optimisation itérative des stratégies de prompt engineering et de récupération"
+      skills_used: ["LLM", "Prompt Engineering", "OpenAI API", "Anthropic API"]
+    - title: "Pipelines IA end-to-end"
+      description: "Conçu les pipelines IA complets (ingestion, nettoyage, chunking, indexation vectorielle) exploitant les sources documentaires internes"
+      skills_used: ["Python", "ETL", "Data Quality", "Vector DB"]
+    - title: "Migration BI Europe"
+      description: "Piloté la migration BI de Qlik vers SAP BusinessObjects pour les équipes métiers Europe : recueil des besoins, spécifications fonctionnelles, coordination technique"
+      skills_used: ["SAP BO", "Qlik", "Change Management", "Stakeholder Management"]
+    - title: "KPI métiers internationaux"
+      description: "Défini et formalisé les KPI métiers (stocks, ventes, supply chain) en collaboration avec le management Europe, US et Asie"
+      skills_used: ["KPI Design", "Power BI", "Business Analysis"]
+    - title: "Plateforme Databricks internationale"
+      description: "Déployé et administré la plateforme Databricks (Azure), traitant des données multi-sources à l'échelle internationale pour 3 régions"
+      skills_used: ["Databricks", "Azure", "PySpark", "Delta Lake"]
+    - title: "Pipelines ETL automatisés"
+      description: "Automatisé des pipelines ETL en Python, SQL et PySpark, garantissant la fiabilité et la performance des flux de données"
+      skills_used: ["Python", "SQL", "PySpark", "ETL/ELT", "CI/CD"]
+    - title: "Dashboards décisionnels multi-continents"
+      description: "Conçu et déployé des tableaux de bord décisionnels (Power BI, SAP BO) pour le suivi des KPI métiers sur 3 continents"
+      skills_used: ["Power BI", "SAP BO", "DAX", "KPI Design"]
+    - title: "Data Quality & documentation"
+      description: "Mis en place les contrôles qualité des données et la documentation technique des pipelines, facilitant la maintenance et l'onboarding"
+      skills_used: ["Data Quality", "Documentation", "CI/CD"]
+    - title: "Automatisation des reportings"
+      description: "Automatisé les reportings récurrents et défini les règles de data quality en amont, réduisant les anomalies dans les livrables décisionnels"
+      skills_used: ["Python", "Power BI", "SAP BO", "Data Quality"]
+
+  # Les 4 rôles tenus chez EssilorLuxottica
+  roles:
+    - title: "Ingénieur IA Générative (LLM & RAG)"
+      focus: "Conception et déploiement de solutions IA en production"
+    - title: "Business Analyst BI"
+      focus: "Migration BI, conduite du changement, coordination internationale"
+    - title: "Data Engineer"
+      focus: "Pipelines ETL, plateforme Databricks, modélisation de données"
+    - title: "Data Analyst"
+      focus: "Dashboards décisionnels, analyses ad hoc, data quality"
+
+  references:
+    - name: "Mohamed Akram Djouahra"
+      role: "Data Engineer – EssilorLuxottica"
+    - name: "Thomas Delon"
+      role: "Project Manager – EssilorLuxottica"
+    - name: "Amine Chabbi"
+      role: "Chef de projet – EssilorLuxottica"
+
+# =============================================================================
+# 🔍 CRITÈRES DE RECHERCHE
+# =============================================================================
+
+job_search:
+  # Titres de postes recherchés (FR + EN pour couvrir les deux marchés)
+  target_titles:
+    # English titles (main results on Adzuna + SwissDevJobs)
+    - "AI Engineer"
+    - "Data Engineer"
+    - "Machine Learning Engineer"
+    - "Data Scientist"
+    - "MLOps Engineer"
+    - "GenAI Engineer"
+    - "BI Engineer"
+    - "Business Intelligence Analyst"
+    - "Data Analyst"
+    - "Analytics Engineer"
+    - "Data Integration Engineer"
+
+  # Mots-clés bonus (augmentent le score de matching)
+  preferred_keywords:
+    - "RAG"
+    - "LLM"
+    - "LangChain"
+    - "GenAI"
+    - "Generative AI"
+    - "NLP"
+    - "Python"
+    - "Databricks"
+    - "Azure"
+    - "MLOps"
+    - "Vector Database"
+    - "Embeddings"
+    - "Prompt Engineering"
+    - "PySpark"
+    - "ETL"
+    - "Power BI"
+    - "Data Pipeline"
+    - "AI Agents"
+    - "Docker"
+    - "Delta Lake"
+    - "SAP BusinessObjects"
+
+  # Mots-clés à éviter
+  exclude_keywords:
+    - "Senior Staff"
+    - "Principal"
+    - "Director"
+    - "10+ years"
+    - "8+ years"
+    - "7+ years"
+    - "Head of"
+    - "VP"
+    - "Lead Architect"
+    - "CTO"
+    - "PhD required"
+
+  # Localisations acceptées (Genève / Vaud prioritaire)
+  locations:
+    - "Geneva"
+    - "Genève"
+    - "Lausanne"
+    - "Nyon"
+    - "Vaud"
+    - "Suisse Romande"
+    - "Remote"
+    - "Télétravail"
+    - "Hybrid"
+    - "Annemasse"
+
+  # Niveau d'expérience accepté
+  experience_levels:
+    - "junior"
+    - "mid"
+    - "mid-level"
+    - "entry"
+    - "0-3 years"
+    - "1-5 years"
+    - "2-4 years"
+    - "2-5 years"
+    - "3-5 years"
+
+  # Score minimum de matching (0-100) pour postuler automatiquement
+  min_match_score: 70
+
+  # Score minimum pour être inclus dans le rapport (même sans candidature auto)
+  min_report_score: 50
+
+# =============================================================================
+# 📄 TEMPLATES
+# =============================================================================
+
+templates:
+  # Pitch FR
+  elevator_pitch_fr: |
+    Data & AI Engineer avec 3 ans d'expérience chez EssilorLuxottica (190 000 collaborateurs),
+    spécialisé dans le développement de systèmes RAG en production (-30% temps de recherche),
+    le benchmarking et l'optimisation de LLMs, et le déploiement de pipelines data à l'échelle
+    internationale (3 régions). Certifié Azure et Databricks, j'ai également piloté une migration
+    BI complète pour les équipes métiers Europe. Disponible immédiatement en Suisse Romande
+    (frontalier, éligible permis G).
+
+  # Pitch EN
+  elevator_pitch_en: |
+    Data & AI Engineer with 3 years of experience at EssilorLuxottica (190,000 employees),
+    specialized in production RAG systems (30% reduction in search time), LLM benchmarking
+    and optimization, and international-scale data pipelines across 3 regions. Azure and
+    Databricks certified, I also led an end-to-end BI migration for European business teams.
+    Available immediately in Western Switzerland (cross-border, eligible for G permit).
+
+  # Phrase d'accroche LinkedIn FR
+  linkedin_hook_fr: |
+    Bonjour {hiring_manager}, je suis Data & AI Engineer avec 3 ans d'expérience chez
+    EssilorLuxottica, spécialisé en RAG et LLMs. Votre offre de {job_title} chez {company}
+    correspond parfaitement à mon profil. J'ai notamment déployé un chatbot RAG en production
+    ayant réduit de 30% le temps de recherche. J'aimerais échanger avec vous à ce sujet.
+
+  # Phrase d'accroche LinkedIn EN
+  linkedin_hook_en: |
+    Hi {hiring_manager}, I'm a Data & AI Engineer with 3 years at EssilorLuxottica,
+    specialized in RAG and LLMs. Your {job_title} role at {company} is a strong match
+    for my profile — I deployed a production RAG chatbot that cut search time by 30%.
+    I'd love to connect and discuss further.

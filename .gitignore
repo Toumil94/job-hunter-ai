@@ -1,0 +1,18 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data (la DB est gérée par le cache GitHub Actions)
+# data/applications.json  # Décommente si tu veux exclure du git
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
