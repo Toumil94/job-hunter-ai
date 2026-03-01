@@ -67,9 +67,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: data/applications.json
-          key: applications-db-${{ github.run_number }}
+          key: applications-v2-${{ github.run_number }}
           restore-keys: |
-            applications-db-
+            applications-v2-
       
       # 5. Déterminer la commande à exécuter
       - name: 🎯 Determine command
