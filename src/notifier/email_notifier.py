@@ -190,11 +190,38 @@ class EmailNotifier:
                         {f' &nbsp;|&nbsp; 💰 {offer.salary}' if offer.salary else ''}
                     </div>
                     <div class="reasons">✨ {reasons}</div>
-                    <div style="margin-top: 6px;">
-                        <a href="{offer.url}">Voir l'offre →</a>
+                    <div style="margin-top: 8px;">
+                        <a href="{offer.url}" style="background: #667eea; color: white; 
+                           padding: 6px 16px; border-radius: 6px; text-decoration: none;
+                           font-size: 13px; font-weight: bold;">
+                           👉 Postuler maintenant
+                        </a>
                     </div>
-                </div>
                 """
+                
+                # Ajouter la lettre de motivation si disponible (top matches)
+                if offer.cover_letter and offer.match_score >= 70:
+                    escaped_letter = offer.cover_letter.replace('\n', '<br>')
+                    html += f"""
+                    <details style="margin-top: 10px; background: #f0f4ff; 
+                             padding: 12px; border-radius: 8px;">
+                        <summary style="cursor: pointer; font-weight: bold; 
+                                 color: #667eea; font-size: 14px;">
+                            ✉️ Lettre de motivation personnalisée (cliquer pour ouvrir)
+                        </summary>
+                        <div style="margin-top: 10px; font-size: 13px; 
+                             line-height: 1.6; color: #333; white-space: pre-line;">
+                            {escaped_letter}
+                        </div>
+                        <div style="margin-top: 8px; text-align: right;">
+                            <span style="font-size: 11px; color: #999;">
+                                📋 Copie ce texte et colle-le dans ta candidature
+                            </span>
+                        </div>
+                    </details>
+                    """
+                
+                html += "</div>"
             
             html += "</div>"
         
@@ -225,6 +252,8 @@ class EmailNotifier:
             
             for f in pending_followups:
                 offer = f["offer"]
+                followup_msg = f.get("followup_message", "")
+                
                 html += f"""
                 <div class="followup-item">
                     <strong>{offer.title}</strong> @ {offer.company}<br>
@@ -233,8 +262,25 @@ class EmailNotifier:
                         Candidature il y a {f['days_since_applied']} jours
                     </span><br>
                     <a href="{offer.url}">Voir l'offre →</a>
-                </div>
                 """
+                
+                if followup_msg:
+                    escaped_msg = followup_msg.replace('\n', '<br>')
+                    html += f"""
+                    <details style="margin-top: 8px; background: #fff7ed; 
+                             padding: 10px; border-radius: 6px;">
+                        <summary style="cursor: pointer; font-weight: bold; 
+                                 color: #f59e0b; font-size: 13px;">
+                            ✉️ Message de relance pré-rédigé (cliquer pour ouvrir)
+                        </summary>
+                        <div style="margin-top: 8px; font-size: 13px; 
+                             line-height: 1.5; color: #333; white-space: pre-line;">
+                            {escaped_msg}
+                        </div>
+                    </details>
+                    """
+                
+                html += "</div>"
             
             html += "</div>"
         

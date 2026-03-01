@@ -69,4 +69,4 @@ safety:
   # Délai entre chaque candidature (secondes)
   delay_between_applications: 30
   # Mode simulation (true = ne postule pas vraiment, juste un rapport)
-  dry_run: true  # ⚠️ METS À false QUAND T'ES PRÊT
+  dry_run: false  # 🟢 ACTIF — génère les lettres de motivation et suit les candidatures

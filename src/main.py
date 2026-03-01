@@ -131,14 +131,14 @@ class JobHunterAI:
         for offer in scored_offers:
             self.tracker.add_offer(offer)
         
-        # ÉTAPE 5: Candidatures automatiques (si mode actif)
+        # ÉTAPE 5: Candidatures automatiques — générer les cover letters
         applied_offers = []
         top_matches = [
             o for o in scored_offers if o.match_score >= self.min_match
         ]
         
         if top_matches:
-            print(f"\n✉️  ÉTAPE 5: {len(top_matches)} offres à score élevé (≥{self.min_match}%)")
+            print(f"\n✉️  ÉTAPE 5: Génération des lettres pour {len(top_matches)} top matches (≥{self.min_match}%)")
             applied_offers = self._auto_apply(top_matches)
         else:
             print(f"\n⚠️  ÉTAPE 5: Aucune offre au-dessus du seuil ({self.min_match}%)")
@@ -324,7 +324,7 @@ class JobHunterAI:
         return applied
     
     def _handle_followups(self) -> list[dict]:
-        """Gère les relances automatiques."""
+        """Gère les relances automatiques et génère les messages."""
         pending = self.tracker.get_pending_followups()
         
         if not pending:
@@ -341,16 +341,18 @@ class JobHunterAI:
             try:
                 # Générer le message de relance
                 message = self.cover_gen.generate_followup_message(offer, num)
+                item["followup_message"] = message
                 
-                if self.dry_run:
-                    print(f"      🧪 [SIMULATION] Message de relance généré")
-                else:
+                if not self.dry_run:
                     # En mode actif, enregistrer la relance
                     self.tracker.add_followup(offer.id, num)
-                    print(f"      ✅ Relance #{num} envoyée")
+                    print(f"      ✅ Relance #{num} générée")
+                else:
+                    print(f"      🧪 [SIMULATION] Message de relance généré")
                     
             except Exception as e:
                 print(f"      ❌ Erreur: {e}")
+                item["followup_message"] = ""
         
         return pending
 
