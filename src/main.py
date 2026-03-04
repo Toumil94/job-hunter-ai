@@ -31,7 +31,7 @@ load_dotenv()
 ROOT_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
-from src.scrapers import AdzunaScraper, SwissDevJobsScraper, AdzunaBroadScraper, JobOffer
+from src.scrapers import AdzunaScraper, JoobleScraper, AdzunaBroadScraper, JobOffer
 from src.matcher.ai_matcher import AIMatcher, CoverLetterGenerator
 from src.tracker.tracker import ApplicationTracker
 from src.notifier.email_notifier import EmailNotifier
@@ -50,7 +50,7 @@ class JobHunterAI:
         self.scrapers = [
             AdzunaScraper(self.config, self.profile),
             AdzunaBroadScraper(self.config, self.profile),
-            SwissDevJobsScraper(self.config, self.profile),
+            JoobleScraper(self.config, self.profile),
         ]
         self.matcher = AIMatcher(self.config, self.profile)
         self.cover_gen = CoverLetterGenerator(self.config, self.profile)

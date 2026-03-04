@@ -90,101 +90,169 @@ class AdzunaScraper(BaseScraper):
         return None
 
 
-class SwissDevJobsScraper(BaseScraper):
+class JoobleScraper(BaseScraper):
     """
-    Scraper pour SwissDevJobs.ch — Site spécialisé tech en Suisse.
-    URL format: /jobs/{category}/{location}
-    Categories: Data, AI, DevOps, Cloud, all
-    Locations: Geneva, Lausanne, all
+    Scraper pour Jooble — Agrégateur GRATUIT qui récupère les offres de:
+    LinkedIn, JobUp, jobs.ch, Indeed, Glassdoor, et des centaines d'autres sites.
+    API gratuite: https://jooble.org/api/about
     """
     
     def __init__(self, config: dict, profile: dict):
         super().__init__(config, profile)
-        self.source_name = "swissdevjobs"
-        self.base_url = "https://swissdevjobs.ch"
+        self.source_name = "jooble"
+        self.api_key = os.getenv("JOOBLE_API_KEY", "")
+        self.base_url = f"https://jooble.org/api/{self.api_key}"
     
     def search_all(self) -> list[JobOffer]:
-        """Recherche avec les bonnes combinaisons catégorie/location."""
-        from bs4 import BeautifulSoup
+        """Recherche sur Jooble avec tous les titres de postes."""
+        if not self.api_key:
+            print("    ⚠️  Jooble: JOOBLE_API_KEY manquante (gratuit: https://jooble.org/api/about)")
+            return []
         
         all_offers = []
         seen_ids = set()
         
-        # Combinaisons catégorie + location — Genève et Vaud uniquement
+        # Requêtes ciblées — locations simplifiées pour Jooble
         searches = [
-            ("Data", "Geneva"),
-            ("Data", "Lausanne"),
-            ("AI", "Geneva"),
-            ("AI", "Lausanne"),
-            ("DevOps", "Geneva"),
-            ("DevOps", "Lausanne"),
-            ("Cloud", "Geneva"),
-            ("Cloud", "Lausanne"),
-            ("all", "Geneva"),
-            ("all", "Lausanne"),
+            # IA & ML — Geneva
+            ("AI engineer", "Geneva"),
+            ("machine learning", "Geneva"),
+            ("artificial intelligence", "Geneva"),
+            ("deep learning", "Geneva"),
+            ("NLP", "Geneva"),
+            ("LLM", "Geneva"),
+            ("generative AI", "Geneva"),
+            ("chatbot developer", "Geneva"),
+            ("computer vision", "Geneva"),
+            # IA & ML — Lausanne
+            ("AI engineer", "Lausanne"),
+            ("machine learning", "Lausanne"),
+            ("artificial intelligence", "Lausanne"),
+            # Data Engineering
+            ("data engineer", "Geneva"),
+            ("data engineer", "Lausanne"),
+            ("data engineer", "Nyon"),
+            ("ETL developer", "Geneva"),
+            ("databricks", "Geneva"),
+            ("Azure data", "Geneva"),
+            ("data pipeline", "Geneva"),
+            ("data platform", "Geneva"),
+            ("data platform", "Lausanne"),
+            # Data Science & Analytics
+            ("data scientist", "Geneva"),
+            ("data scientist", "Lausanne"),
+            ("data analyst", "Geneva"),
+            ("data analyst", "Lausanne"),
+            ("business intelligence", "Geneva"),
+            ("business intelligence", "Lausanne"),
+            ("Power BI", "Geneva"),
+            ("analytics engineer", "Geneva"),
+            ("analytics", "Lausanne"),
+            # Python / Cloud / DevOps
+            ("python developer", "Geneva"),
+            ("python developer", "Lausanne"),
+            ("MLOps", "Geneva"),
+            ("cloud data", "Geneva"),
+            # Consultant / Junior / Stage
+            ("data consultant", "Geneva"),
+            ("data consultant", "Lausanne"),
+            ("junior data", "Geneva"),
+            ("junior data", "Lausanne"),
+            ("intern data", "Geneva"),
+            ("graduate data", "Geneva"),
+            ("stage data", "Genève"),
+            ("stage IA", "Genève"),
+            ("consultant BI", "Genève"),
+            # Termes français
+            ("ingénieur données", "Genève"),
+            ("ingénieur IA", "Genève"),
+            ("analyste données", "Genève"),
+            ("développeur Python", "Genève"),
         ]
         
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                          "AppleWebKit/537.36 (KHTML, like Gecko) "
-                          "Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml",
-            "Accept-Language": "en-US,en;q=0.9,fr;q=0.8",
+            "Content-Type": "application/json",
         }
         
-        for category, location in searches:
+        for keywords, location in searches:
             try:
-                url = f"{self.base_url}/jobs/{category}/{location}"
-                response = requests.get(url, headers=headers, timeout=30)
+                payload = {
+                    "keywords": keywords,
+                    "location": location,
+                    "page": 1,
+                }
                 
-                if response.status_code != 200:
-                    continue
+                response = requests.post(
+                    self.base_url, 
+                    json=payload, 
+                    headers=headers, 
+                    timeout=30
+                )
+                response.raise_for_status()
+                data = response.json()
                 
-                soup = BeautifulSoup(response.content, "html.parser")
+                jobs = data.get("jobs", [])
+                count = 0
                 
-                # Chercher les liens d'offres (format: /jobs/Company-Job-Title)
-                job_links = soup.select("a[href*='/jobs/'][href*='-']")
-                
-                for link in job_links[:15]:
-                    href = link.get("href", "")
-                    text = link.get_text(strip=True)
+                for job in jobs:
+                    title = job.get("title", "").strip()
+                    # Nettoyer le HTML du titre et description
+                    title = title.replace("<b>", "").replace("</b>", "")
                     
-                    # Filtrer les liens de navigation
-                    if not text or len(text) < 5 or href.count("/") > 3:
+                    desc = job.get("snippet", "")
+                    desc = desc.replace("<b>", "").replace("</b>", "")
+                    
+                    job_location = job.get("location", location)
+                    
+                    # Filtre géographique — blacklist US + whitelist Suisse romande
+                    loc_low = (job_location or "").lower()
+                    comp_low = (job.get("company", "") or "").lower()
+                    all_text = f"{loc_low} {title.lower()} {comp_low}"
+                    
+                    # REJETER si mot-clé US détecté
+                    if any(t in all_text for t in [
+                        "illinois", "indiana", "ohio", "texas", "california",
+                        "arizona", "florida", "new york", "colorado",
+                        ", il", ", pa", ", ma", ", ny", ", ca", ", tx",
+                        "delnor", "northwestern medicine", "belterra",
+                        "h&r block", "weedman", "marklund", "casino resort",
+                    ]):
                         continue
-                    if any(skip in href.lower() for skip in ["/salaries/", "/communities/", "/blog/"]):
+                    
+                    # ACCEPTER si indicateur Suisse romande détecté
+                    ok = any(t in loc_low for t in [
+                        "genev", "lausann", "nyon", "vaud", "suisse",
+                        "switzerland", "schweiz", "swiss", "gland", "rolle",
+                        "morges", "yverdon", "montreux", "vevey", "carouge",
+                        "lancy", "meyrin", "vernier", "annemass", "ferney",
+                        "eysins", "prangins", "renens", "pully", "coppet",
+                    ])
+                    if not ok:
                         continue
-                    
-                    full_url = href if href.startswith("http") else f"{self.base_url}{href}"
-                    
-                    # Extraire le salaire s'il est visible
-                    parent = link.find_parent()
-                    salary_text = ""
-                    if parent:
-                        salary_el = parent.find(string=lambda s: s and "CHF" in s if s else False)
-                        if salary_el:
-                            salary_text = salary_el.strip()
                     
                     offer = JobOffer(
-                        title=text,
-                        company="",  # Sera dans le titre ou la page détaillée
-                        location=location if location != "all" else "Switzerland",
-                        description=f"Category: {category}",
-                        url=full_url,
-                        salary=salary_text or None,
-                        source="swissdevjobs",
+                        title=title,
+                        company=job.get("company", ""),
+                        location=job.get("location", location),
+                        description=desc,
+                        url=job.get("link", ""),
+                        salary=job.get("salary", None),
+                        posted_date=job.get("updated", ""),
+                        source="jooble",
                     )
                     
                     if offer.id not in seen_ids:
                         seen_ids.add(offer.id)
                         all_offers.append(offer)
+                        count += 1
                 
-                count = len([o for o in all_offers if o.id in seen_ids])
+                if count > 0:
+                    print(f"    ✅ Jooble: {count} offres pour '{keywords}' @ {location}")
                 
             except Exception as e:
-                print(f"    ⚠️  SwissDevJobs [{category}/{location}] erreur: {e}")
+                print(f"    ⚠️  Jooble erreur pour '{keywords}': {e}")
         
-        print(f"    ✅ SwissDevJobs: {len(all_offers)} offres au total")
+        print(f"    📊 Jooble total: {len(all_offers)} offres uniques")
         return all_offers
     
     def search(self, query: str, location: str, **kwargs) -> list[JobOffer]:

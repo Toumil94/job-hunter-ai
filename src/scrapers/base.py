@@ -48,8 +48,23 @@ class JobOffer:
     cover_letter: Optional[str] = None
     
     def __post_init__(self):
-        if not self.id and self.title and self.company:
-            raw = f"{self.title}|{self.company}|{self.source}"
+        if not self.id and self.title:
+            # Normaliser pour attraper les quasi-doublons
+            # Ex: "Business Analyst Analytics - 80-100 %" et "Business Analyst Analytics - 80-100%"
+            import re
+            title_clean = self.title.lower().strip()
+            title_clean = re.sub(r'[^a-z0-9àâäéèêëïîôùûüÿçœæ]+', ' ', title_clean)
+            title_clean = re.sub(r'\s+', ' ', title_clean).strip()
+            
+            company_clean = (self.company or "").lower().strip()
+            company_clean = re.sub(r'[^a-z0-9àâäéèêëïîôùûüÿçœæ]+', ' ', company_clean)
+            company_clean = re.sub(r'\s+', ' ', company_clean).strip()
+            
+            # Ignorer "Job-Room" comme company (c'est juste l'agrégateur)
+            if company_clean in ("job room", "job room ch"):
+                company_clean = ""
+            
+            raw = f"{title_clean}|{company_clean}"
             self.id = hashlib.md5(raw.encode()).hexdigest()[:12]
     
     def to_dict(self) -> dict:

@@ -166,6 +166,10 @@ job_search:
     - "Data Analyst"
     - "Analytics Engineer"
     - "Data Integration Engineer"
+    - "NLP Engineer"
+    - "Junior Data Engineer"
+    - "Junior AI Engineer"
+    - "Data Consultant"
 
   # Mots-clés bonus (augmentent le score de matching)
   preferred_keywords:
@@ -231,10 +235,10 @@ job_search:
     - "3-5 years"
 
   # Score minimum de matching (0-100) pour postuler automatiquement
-  min_match_score: 70
+  min_match_score: 65
 
   # Score minimum pour être inclus dans le rapport (même sans candidature auto)
-  min_report_score: 50
+  min_report_score: 40
 
 # =============================================================================
 # 📄 TEMPLATES
