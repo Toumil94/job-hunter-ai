@@ -6,7 +6,8 @@ __pycache__/
 venv/
 
 # Data (la DB est gérée par le cache GitHub Actions)
-# data/applications.json  # Décommente si tu veux exclure du git
+data/applications.json
+data/*.csv
 
 # IDE
 .vscode/

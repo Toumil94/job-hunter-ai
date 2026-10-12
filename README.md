@@ -1,149 +1,74 @@
-# 🤖 Job Hunter AI
+# Job Hunter AI
 
-> **Automatise ta recherche d'emploi 24/7 — gratuitement.**
+Un assistant qui automatise la partie répétitive de ma recherche d'emploi : chaque matin, il collecte les offres Data et IA en Suisse romande, les fait évaluer par un LLM au regard de mon profil, prépare une lettre de motivation pour les meilleures, et m'envoie un rapport par e-mail. Les décisions restent humaines : je relis et je postule moi-même.
 
-Un système IA complet qui scrape les offres d'emploi, les analyse avec Claude, génère des lettres de motivation personnalisées, et t'envoie un rapport quotidien. Le tout tourne automatiquement sur GitHub Actions.
+> *EN : A personal job-search assistant. Every morning it collects Data/AI job offers in Western Switzerland, scores them against my profile with Claude, drafts tailored cover letters for the best matches and emails me a report. A human reviews and applies.*
 
-## ⚡ Ce que ça fait
+## Pourquoi ce projet
 
-| Fonctionnalité | Description |
-|---|---|
-| 🔍 **Scraping multi-plateforme** | Adzuna, Indeed, JobUp.ch |
-| 🧠 **Matching IA** | Claude analyse et score chaque offre vs ton profil (0-100%) |
-| ✍️ **Lettres de motivation** | Générées automatiquement et personnalisées par offre |
-| 📧 **Rapports email** | Rapport HTML quotidien avec les meilleures offres |
-| 🔔 **Relances auto** | Rappels de relance à J+7, J+14, J+21 |
-| 📊 **Tracking** | Suivi complet de toutes tes candidatures |
-| 🆓 **100% gratuit** | Tourne sur GitHub Actions (2000 min/mois gratuit) |
+Après neuf mois de recherche, je passais plus de temps à trier des offres qu'à préparer de bonnes candidatures. J'ai automatisé le tri pour me concentrer sur ce qui compte : les offres où mon profil colle vraiment.
 
-## 🚀 Installation (10 minutes)
+## Fonctionnement
 
-### 1. Clone et configure
+```mermaid
+flowchart LR
+    A[Adzuna API] --> C[Collecte et<br/>dédoublonnage]
+    B[Jooble API] --> C
+    C --> D[Score IA 0-100<br/>Claude]
+    D -->|score élevé| E[Lettre de motivation<br/>personnalisée]
+    D --> F[(Suivi des candidatures)]
+    E --> G[Rapport e-mail<br/>quotidien]
+    F --> H[Rappels de relance<br/>J+7, J+14, J+21]
+```
+
+| Brique | Rôle | Fichier |
+|---|---|---|
+| Collecte | Interroge les API Adzuna et Jooble avec les mots-clés et la zone du profil, normalise et dédoublonne les offres. | `src/scrapers/` |
+| Matching | Envoie l'offre et le profil à Claude, qui renvoie un score de 0 à 100, les points forts et les manques. | `src/matcher/ai_matcher.py` |
+| Rédaction | Génère une lettre de motivation et un e-mail adaptés à chaque offre retenue. | `src/matcher/ai_matcher.py` |
+| Suivi | Garde l'historique des offres vues, notées et envoyées, et calcule les relances à faire. | `src/tracker/tracker.py` |
+| Rapport | Envoie un récapitulatif HTML avec les meilleures offres du jour. | `src/notifier/email_notifier.py` |
+| Orchestration | Lance le cycle complet chaque matin via GitHub Actions. | `.github/workflows/daily_hunt.yml` |
+
+## Choix de conception
+
+- **Un humain valide chaque candidature.** L'outil ne contacte jamais un employeur : il prépare la lettre et le suivi, je relis et je postule moi-même.
+- **Données personnelles hors du dépôt.** Les clés API sont des secrets GitHub, et l'historique des candidatures est conservé dans le cache privé de GitHub Actions, jamais publié ici.
+- **Coût maîtrisé.** Le nombre de lettres générées par jour est plafonné dans `config/settings.yaml`, ce qui limite les appels au LLM à quelques francs par mois.
+- **Sources officielles uniquement.** Les offres viennent d'API publiques d'agrégateurs, sans scraping de sites qui l'interdisent.
+
+## Commandes
 
 ```bash
-git clone https://github.com/ton-user/job-hunter-ai.git
+python -m src.main hunt       # cycle complet : collecte, score, lettres, rapport
+python -m src.main scan       # collecte et score uniquement
+python -m src.main followup   # relances à faire
+python -m src.main stats      # statistiques de la recherche
+python -m src.main export     # export CSV du suivi
+```
+
+## Installation
+
+```bash
+git clone https://github.com/Toumil94/job-hunter-ai.git
 cd job-hunter-ai
 pip install -r requirements.txt
-cp .env.example .env
+cp .env.example .env     # puis renseigner les clés
 ```
 
-### 2. Obtiens tes clés API (gratuites)
-
-| Service | Lien | Coût |
-|---|---|---|
-| **Anthropic (Claude)** | [console.anthropic.com](https://console.anthropic.com/) | ~3-5€/mois |
-| **Adzuna** | [developer.adzuna.com](https://developer.adzuna.com/) | Gratuit |
-| **Gmail App Password** | [Guide Google](https://support.google.com/accounts/answer/185833) | Gratuit |
-
-### 3. Remplis le fichier `.env`
-
-```bash
-ANTHROPIC_API_KEY=sk-ant-xxxxx
-ADZUNA_APP_ID=ton_id
-ADZUNA_APP_KEY=ta_key
-EMAIL_SENDER=ton.email@gmail.com
-EMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
-EMAIL_RECIPIENT=ton.email@gmail.com
-```
-
-### 4. Personnalise ton profil
-
-Édite `config/profile.yaml` avec tes infos, compétences, et critères de recherche.
-
-### 5. Premier test
-
-```bash
-# Mode simulation (ne postule pas vraiment)
-python -m src.main scan
-```
-
-### 6. Déploie sur GitHub Actions (24/7 gratuit)
-
-```bash
-git init
-git add .
-git commit -m "🚀 Initial setup"
-git remote add origin https://github.com/ton-user/job-hunter-ai.git
-git push -u origin main
-```
-
-Puis dans **GitHub → Settings → Secrets → Actions**, ajoute tes clés API.
-
-## 📋 Commandes
-
-```bash
-python -m src.main hunt       # 🎯 Cycle complet (scrape → match → apply → report)
-python -m src.main scan       # 📡 Scan seul (pas de candidature)
-python -m src.main followup   # 🔔 Vérifie les relances à faire
-python -m src.main stats      # 📊 Affiche les statistiques
-python -m src.main export     # 📥 Exporte en CSV
-python -m src.main daemon     # 👹 Mode continu local
-```
-
-## 📁 Structure
-
-```
-job-hunter-ai/
-├── config/
-│   ├── profile.yaml          # Ton profil et critères
-│   └── settings.yaml         # Config technique
-├── src/
-│   ├── scrapers/             # Scrapers multi-plateforme
-│   ├── matcher/              # Matching IA avec Claude
-│   ├── tracker/              # Suivi des candidatures
-│   ├── notifier/             # Rapports email HTML
-│   └── main.py               # Orchestrateur principal
-├── data/
-│   └── applications.json     # Base de données locale
-├── .github/workflows/
-│   └── daily_hunt.yml        # GitHub Actions (24/7)
-└── .env                      # Tes clés API (ne pas commiter!)
-```
-
-## ⚙️ Configuration
-
-### Score de matching
-
-Dans `config/profile.yaml` :
-- `min_match_score: 70` → Score minimum pour postuler automatiquement
-- `min_report_score: 50` → Score minimum pour apparaître dans le rapport
-
-### Planning (GitHub Actions)
-
-Dans `.github/workflows/daily_hunt.yml` :
-- Scan matin : 7h CET
-- Scan soir : 18h CET
-- Relances : 9h CET
-
-### Mode simulation
-
-Dans `config/settings.yaml`, `safety.dry_run: true` permet de tout tester sans envoyer de vraies candidatures.
-
-## 💰 Coût réel
-
-| Service | Coût mensuel |
+| Variable | Où l'obtenir |
 |---|---|
-| GitHub Actions | **Gratuit** |
-| Adzuna API | **Gratuit** |
-| Gmail SMTP | **Gratuit** |
-| Claude API | **~3-5€** |
-| **Total** | **~3-5€/mois** |
+| `ANTHROPIC_API_KEY` | console.anthropic.com |
+| `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` | developer.adzuna.com (gratuit) |
+| `JOOBLE_API_KEY` | jooble.org/api/about (gratuit) |
+| `EMAIL_SENDER`, `EMAIL_APP_PASSWORD`, `EMAIL_RECIPIENT` | Un mot de passe d'application Gmail |
 
-## 🔒 Sécurité
+Le profil (compétences, mots-clés, zone de recherche) se règle dans `config/profile.yaml`, les seuils et le planning dans `config/settings.yaml`. Pour l'automatisation, ajouter les mêmes variables en secrets du dépôt (Settings, puis Secrets and variables, puis Actions).
 
-- Mode `dry_run` activé par défaut
-- Limite de candidatures par jour configurable
-- Délai entre les candidatures
-- Clés API dans les secrets GitHub (jamais commitées)
+## Stack
 
-## 📈 Roadmap
+Python · Claude API (Anthropic) · API Adzuna et Jooble · GitHub Actions · YAML
 
-- [ ] Scraper LinkedIn (via cookies)
-- [ ] Auto-apply sur les sites qui le permettent
-- [ ] Dashboard web local
-- [ ] Intégration calendrier pour les entretiens
-- [ ] Préparation automatique d'entretien
+## Auteur
 
----
-
-*Built with 🤖 Claude + Python + GitHub Actions*
+**Lyes Toumi**, Data & AI Engineer à Genève. [Portfolio](https://toumilyes.netlify.app) · [LinkedIn](https://www.linkedin.com/in/lyes-toumi/)

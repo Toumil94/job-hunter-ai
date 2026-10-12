@@ -5,14 +5,12 @@
 personal:
   name: "Lyes"
   full_name: "Lyes Toumi"
-  email: "[retiré]"
-  phone: "[retiré]"
-  location: "Ambilly (74), France – Frontalier Genève"
+  location: "Genève, Suisse"
   target_location: "Genève / Lausanne / Suisse Romande"
   search_radius_km: 50
   availability: "Immédiate"
-  work_permit: "Citoyen UE – éligible permis G"
-  linkedin: "https://linkedin.com/in/lyes-toumi"
+  work_permit: "Permis B (résident à Genève)"
+  linkedin: "https://www.linkedin.com/in/lyes-toumi/"
   portfolio: "https://toumilyes.netlify.app"
   languages:
     - language: "Français"
