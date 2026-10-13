@@ -8,7 +8,7 @@
 # 1. Pousse ce repo sur GitHub
 # 2. Va dans Settings → Secrets and variables → Actions
 # 3. Ajoute ces secrets:
-#    - ANTHROPIC_API_KEY
+#    - GROQ_API_KEY        (gratuit, https://console.groq.com) ou ANTHROPIC_API_KEY
 #    - ADZUNA_APP_ID
 #    - ADZUNA_APP_KEY
 #    - EMAIL_SENDER
@@ -85,6 +85,7 @@ jobs:
       # 6. Lancer Job Hunter AI
       - name: 🤖 Run Job Hunter AI (${{ steps.command.outputs.cmd }})
         env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}

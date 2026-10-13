@@ -383,8 +383,8 @@ Commandes:
     
     # Vérifier les clés API essentielles
     if args.command in ["hunt", "scan", "followup"]:
-        if not os.getenv("ANTHROPIC_API_KEY"):
-            print("❌ ANTHROPIC_API_KEY non définie !")
+        if not (os.getenv("GROQ_API_KEY") or os.getenv("ANTHROPIC_API_KEY")):
+            print("❌ Aucune clé d'IA : définir GROQ_API_KEY (gratuit) ou ANTHROPIC_API_KEY")
             print("   → Copie .env.example en .env et ajoute ta clé")
             sys.exit(1)
     

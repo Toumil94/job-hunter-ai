@@ -1,12 +1,12 @@
 """
-🧠 AI Matcher — Utilise Claude pour scorer chaque offre par rapport à ton profil.
+🧠 AI Matcher — Utilise un LLM (Groq gratuit ou Claude) pour scorer chaque offre par rapport à ton profil.
 C'est le cerveau du système.
 """
 
 import os
 import json
 import time
-from anthropic import Anthropic
+from src.llm import complete
 from src.scrapers.base import JobOffer
 
 
@@ -16,7 +16,6 @@ class AIMatcher:
     def __init__(self, config: dict, profile: dict):
         self.config = config
         self.profile = profile
-        self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.model = config.get("apis", {}).get("anthropic", {}).get(
             "model", "claude-sonnet-4-20250514"
         )
@@ -93,14 +92,8 @@ Critères de scoring:
 - 0-29: Pas pertinent
 """
         
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        
         # Parser la réponse JSON
-        response_text = response.content[0].text.strip()
+        response_text = complete(prompt, self.max_tokens, self.model)
         
         # Nettoyer si Claude ajoute des backticks
         if response_text.startswith("```"):
@@ -207,7 +200,6 @@ class CoverLetterGenerator:
     def __init__(self, config: dict, profile: dict):
         self.config = config
         self.profile = profile
-        self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.model = config.get("apis", {}).get("anthropic", {}).get(
             "model", "claude-sonnet-4-20250514"
         )
@@ -267,13 +259,7 @@ Réalisations clés:
 - Format: texte brut, pas de markdown
 """
         
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=1500,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        
-        return response.content[0].text.strip()
+        return complete(prompt, 1500, self.model)
     
     def generate_followup_message(
         self, offer: JobOffer, followup_number: int = 1
@@ -305,10 +291,4 @@ Réalisations clés:
 - Format: OBJET: [objet]\n\n[corps du message]
 """
         
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=500,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        
-        return response.content[0].text.strip()
+        return complete(prompt, 500, self.model)

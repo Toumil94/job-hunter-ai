@@ -6,8 +6,8 @@
 
 # --- APIs ---
 apis:
-  # Claude API (pour le matching IA et génération de lettres)
-  # Obtenir une clé: https://console.anthropic.com/
+  # IA : Groq gratuit si GROQ_API_KEY est défini (modèle via GROQ_MODEL, défaut openai/gpt-oss-120b),
+  # sinon Claude ci-dessous (payant, https://console.anthropic.com/)
   anthropic:
     model: "claude-sonnet-4-20250514"
     max_tokens: 1500
