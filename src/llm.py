@@ -25,8 +25,18 @@ def provider() -> str:
     raise RuntimeError("Aucune clé d'IA : renseigner GROQ_API_KEY (gratuit) ou ANTHROPIC_API_KEY.")
 
 
+_announced = False
+
+
 def complete(prompt: str, max_tokens: int = 1500, anthropic_model: str | None = None) -> str:
     """Envoie un prompt et renvoie le texte de la réponse."""
+    global _announced
+    if not _announced:
+        # visible en un clic dans GitHub Actions (annotation)
+        name = provider()
+        model = os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL) if name == "groq" else (anthropic_model or "claude")
+        print(f"::notice title=IA::Fournisseur {name}, modèle {model}", flush=True)
+        _announced = True
     if provider() == "groq":
         return _groq(prompt, max_tokens)
     return _anthropic(prompt, max_tokens, anthropic_model)
